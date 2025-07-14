@@ -32,6 +32,10 @@ windows:
 	@echo "Building for Windows..."
 	@GOOS=windows GOARCH=$(ARCH) go build $(LDFLAGS) -o $(BIN_DIR)/$(BINARY_NAME)-windows-$(ARCH).exe .
 
+.PHONE: test
+test:
+	go test ./...
+
 .PHONY: version
 version:
 	@echo "Version: $(VERSION)"
