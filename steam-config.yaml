@@ -1,0 +1,9 @@
+---
+
+rpc:
+  hostname: localhost
+  port: 12131
+steam:
+  publisher_id: your_publisher_id
+  app_id: 480
+  key: your_steam_key

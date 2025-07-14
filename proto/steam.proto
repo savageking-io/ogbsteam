@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package user;
+option go_package = "github.com/savageking-io/ogbsteam/proto";
+
+service SteamService {
+  rpc AuthUserTicket(UserTicket) returns (AuthUserTicketResponse);
+}
+
+message UserTicket {
+  string ticket = 1;
+}
+
+message AuthUserTicketResponse {
+  string Result = 1;
+  string SteamId = 2;
+  string OwnerSteamId = 3;
+  bool IsVacBanned = 4;
+  bool IsPublisherBanned = 5;
+}

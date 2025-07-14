@@ -64,5 +64,26 @@ func Serve(c *cli.Context) error {
 	}
 
 	log.Infof("Configuration loaded from %s", ConfigFilepath)
+
+	service := NewService(&AppConfig)
+	if err := service.Init(); err != nil {
+		log.Errorf("Failed to initialize service: %s", err.Error())
+		return err
+	}
+
+	errChan := make(chan error, 1)
+
+	go func() {
+		err := service.Start()
+		errChan <- err
+	}()
+
+	select {
+	case err := <-errChan:
+		if err != nil {
+			log.Errorf("REST channel reported error: %v", err)
+		}
+	}
+
 	return nil
 }
