@@ -24,6 +24,6 @@ RUN chmod +x /app/ogbsteam && \
 
 USER appuser
 
-EXPOSE 8090
+EXPOSE 12131
 
 CMD ["/app/ogbsteam", "serve", "--config", "/app/steam-config.yaml"]
