@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	SteamService_AuthUserTicket_FullMethodName = "/user.SteamService/AuthUserTicket"
+	SteamService_Ping_FullMethodName           = "/user.SteamService/Ping"
 )
 
 // SteamServiceClient is the client API for SteamService service.
@@ -27,6 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type SteamServiceClient interface {
 	AuthUserTicket(ctx context.Context, in *UserTicket, opts ...grpc.CallOption) (*AuthUserTicketResponse, error)
+	Ping(ctx context.Context, in *PingMessage, opts ...grpc.CallOption) (*PingMessage, error)
 }
 
 type steamServiceClient struct {
@@ -47,11 +49,22 @@ func (c *steamServiceClient) AuthUserTicket(ctx context.Context, in *UserTicket,
 	return out, nil
 }
 
+func (c *steamServiceClient) Ping(ctx context.Context, in *PingMessage, opts ...grpc.CallOption) (*PingMessage, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(PingMessage)
+	err := c.cc.Invoke(ctx, SteamService_Ping_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // SteamServiceServer is the server API for SteamService service.
 // All implementations must embed UnimplementedSteamServiceServer
 // for forward compatibility.
 type SteamServiceServer interface {
 	AuthUserTicket(context.Context, *UserTicket) (*AuthUserTicketResponse, error)
+	Ping(context.Context, *PingMessage) (*PingMessage, error)
 	mustEmbedUnimplementedSteamServiceServer()
 }
 
@@ -64,6 +77,9 @@ type UnimplementedSteamServiceServer struct{}
 
 func (UnimplementedSteamServiceServer) AuthUserTicket(context.Context, *UserTicket) (*AuthUserTicketResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AuthUserTicket not implemented")
+}
+func (UnimplementedSteamServiceServer) Ping(context.Context, *PingMessage) (*PingMessage, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Ping not implemented")
 }
 func (UnimplementedSteamServiceServer) mustEmbedUnimplementedSteamServiceServer() {}
 func (UnimplementedSteamServiceServer) testEmbeddedByValue()                      {}
@@ -104,6 +120,24 @@ func _SteamService_AuthUserTicket_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SteamService_Ping_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PingMessage)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SteamServiceServer).Ping(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SteamService_Ping_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SteamServiceServer).Ping(ctx, req.(*PingMessage))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // SteamService_ServiceDesc is the grpc.ServiceDesc for SteamService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -114,6 +148,10 @@ var SteamService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AuthUserTicket",
 			Handler:    _SteamService_AuthUserTicket_Handler,
+		},
+		{
+			MethodName: "Ping",
+			Handler:    _SteamService_Ping_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -3,8 +3,16 @@ syntax = "proto3";
 package user;
 option go_package = "github.com/savageking-io/ogbsteam/proto";
 
+import "google/protobuf/timestamp.proto";
+
 service SteamService {
   rpc AuthUserTicket(UserTicket) returns (AuthUserTicketResponse);
+  rpc Ping(PingMessage) returns (PingMessage);
+}
+
+message PingMessage {
+  google.protobuf.Timestamp SentAt = 1;
+  google.protobuf.Timestamp RepliedAt = 2;
 }
 
 message UserTicket {
