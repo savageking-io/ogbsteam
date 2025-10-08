@@ -19,8 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	SteamService_AuthUserTicket_FullMethodName = "/user.SteamService/AuthUserTicket"
-	SteamService_Ping_FullMethodName           = "/user.SteamService/Ping"
+	SteamService_AuthUserTicket_FullMethodName = "/steam.SteamService/AuthUserTicket"
+	SteamService_Ping_FullMethodName           = "/steam.SteamService/Ping"
 )
 
 // SteamServiceClient is the client API for SteamService service.
@@ -142,7 +142,7 @@ func _SteamService_Ping_Handler(srv interface{}, ctx context.Context, dec func(i
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var SteamService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "user.SteamService",
+	ServiceName: "steam.SteamService",
 	HandlerType: (*SteamServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
