@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/savageking-io/ogbsteam/proto"
+	steam_proto "github.com/savageking-io/ogbsteam/proto"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -17,7 +17,7 @@ type Client struct {
 	port           uint16
 	ErrorChan      chan error
 	conn           *grpc.ClientConn
-	client         proto.SteamServiceClient
+	client         steam_proto.SteamServiceClient
 	maxFailedPings int
 	maxReconnects  int
 }
@@ -97,7 +97,7 @@ func (c *Client) Connect() error {
 		return err
 	}
 
-	c.client = proto.NewSteamServiceClient(c.conn)
+	c.client = steam_proto.NewSteamServiceClient(c.conn)
 	return nil
 }
 
@@ -125,7 +125,7 @@ func (c *Client) ConnectWithRetry() {
 func (c *Client) ping() error {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
 	defer cancel()
-	resp, err := c.client.Ping(ctx, &proto.PingMessage{SentAt: timestamppb.New(time.Now())})
+	resp, err := c.client.Ping(ctx, &steam_proto.PingMessage{SentAt: timestamppb.New(time.Now())})
 	if err != nil {
 		return err
 	}
@@ -136,8 +136,8 @@ func (c *Client) ping() error {
 	return nil
 }
 
-func (c *Client) AuthenticateTicket(ctx context.Context, Ticket string) (*proto.AuthUserTicketResponse, error) {
-	return c.client.AuthUserTicket(ctx, &proto.UserTicket{
+func (c *Client) AuthenticateTicket(ctx context.Context, Ticket string) (*steam_proto.AuthUserTicketResponse, error) {
+	return c.client.AuthUserTicket(ctx, &steam_proto.UserTicket{
 		Ticket: Ticket,
 	})
 }

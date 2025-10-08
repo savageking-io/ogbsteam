@@ -3,7 +3,7 @@ module github.com/savageking-io/ogbsteam/client
 go 1.25.1
 
 require (
-	github.com/savageking-io/ogbsteam/proto v0.0.0-20250831080440-bd5fe06ee29d
+	github.com/savageking-io/ogbsteam/proto v0.6.0
 	github.com/sirupsen/logrus v1.9.3
 	google.golang.org/grpc v1.76.0
 	google.golang.org/protobuf v1.36.10
